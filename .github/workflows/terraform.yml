@@ -46,7 +46,7 @@ jobs:
           terraform_version: "1.7.0"
 
       - name: Terraform Init
-        run: terraform init -reconfigure
+        run: terraform init -input=false
 
       - name: Terraform Format Check
         run: terraform fmt -check
@@ -84,7 +84,7 @@ jobs:
           terraform_version: "1.7.0"
 
       - name: Terraform Init
-        run: terraform init -reconfigure
+        run: terraform init -input=false
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
