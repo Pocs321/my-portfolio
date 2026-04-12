@@ -44,14 +44,10 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.7.0"
-
-      - name: Debug main.tf
-        run: cat main.tf
+          terraform_wrapper: false
 
       - name: Terraform Init
-        env:
-          TF_LOG: DEBUG
-        run: terraform init -input=false -upgrade 2>&1 | head -80
+        run: terraform init -input=false
 
       - name: Terraform Format Check
         run: terraform fmt -check
@@ -87,9 +83,10 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.7.0"
+          terraform_wrapper: false
 
       - name: Terraform Init
-        run: terraform init -input=false -upgrade
+        run: terraform init -input=false
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
