@@ -60,10 +60,10 @@ resource "aws_cloudfront_distribution" "website" {
   # SSL Certificate
   viewer_certificate {
     # If custom domain → use ACM cert; otherwise use default CloudFront cert
-    acm_certificate_arn      = var.domain_name != "" ? aws_acm_certificate_validation.cert[0].certificate_arn : null
+    acm_certificate_arn            = var.domain_name != "" ? aws_acm_certificate_validation.cert[0].certificate_arn : null
     cloudfront_default_certificate = var.domain_name == ""
-    ssl_support_method       = var.domain_name != "" ? "sni-only" : null
-    minimum_protocol_version = var.domain_name != "" ? "TLSv1.2_2021" : "TLSv1"
+    ssl_support_method             = var.domain_name != "" ? "sni-only" : null
+    minimum_protocol_version       = var.domain_name != "" ? "TLSv1.2_2021" : "TLSv1"
   }
 
   # No geographic restrictions
