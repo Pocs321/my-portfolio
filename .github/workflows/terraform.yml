@@ -46,7 +46,11 @@ jobs:
           terraform_version: "1.7.0"
 
       - name: Terraform Init
-        run: terraform init -input=false
+        run: |
+          terraform init -input=false \
+            -backend-config="bucket=portfolio-tf-state-886436953153" \
+            -backend-config="key=project1/terraform.tfstate" \
+            -backend-config="region=ap-southeast-1"
 
       - name: Terraform Format Check
         run: terraform fmt -check
@@ -84,7 +88,11 @@ jobs:
           terraform_version: "1.7.0"
 
       - name: Terraform Init
-        run: terraform init -input=false
+        run: |
+          terraform init -input=false \
+            -backend-config="bucket=portfolio-tf-state-886436953153" \
+            -backend-config="key=project1/terraform.tfstate" \
+            -backend-config="region=ap-southeast-1"
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
