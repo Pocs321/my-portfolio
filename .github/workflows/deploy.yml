@@ -1,0 +1,66 @@
+name: Deploy to S3 & Invalidate CloudFront
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'               # Only deploy when website files change
+      - '.github/workflows/**' # Or when workflow changes
+
+# Required for OIDC authentication with AWS
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || 'ap-southeast-1' }}
+  S3_BUCKET_NAME: ${{ vars.S3_BUCKET_NAME }}
+  CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+  IAM_ROLE_ARN: ${{ vars.IAM_ROLE_ARN }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Configure AWS credentials via OIDC (no access keys needed!)
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.IAM_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Step 3: Sync website files to S3
+      - name: Sync files to S3
+        run: |
+          echo "Deploying to S3 bucket: ${{ env.S3_BUCKET_NAME }}"
+          aws s3 sync src/ s3://${{ env.S3_BUCKET_NAME }} \
+            --delete \
+            --cache-control "max-age=86400"
+          echo "S3 sync complete!"
+
+      # Step 4: Invalidate CloudFront cache so changes go live immediately
+      - name: Invalidate CloudFront cache
+        run: |
+          echo "Invalidating CloudFront distribution: ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}"
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+          echo "CloudFront invalidation started!"
+
+      # Step 5: Print deployment info
+      - name: Deployment summary
+        run: |
+          echo "========================================"
+          echo "  Deployment Complete!"
+          echo "========================================"
+          echo "  S3 Bucket:      ${{ env.S3_BUCKET_NAME }}"
+          echo "  CloudFront ID:  ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}"
+          echo "  Region:         ${{ env.AWS_REGION }}"
+          echo "========================================"

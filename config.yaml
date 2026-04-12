@@ -1,0 +1,32 @@
+# AWS Configuration for Static Website Deployment
+# Update these values with your AWS resources
+
+aws:
+  region: ap-southeast-1
+  s3:
+    bucket_name: my-portfolio-site-2026-886436953153
+    # Ensure bucket has public read policy and static website hosting enabled
+  cloudfront:
+    distribution_id: E1ABCDE2FGHIJ
+    # Find this in CloudFront console - looks like E1ABCDE2FGHIJ
+
+# Deployment settings
+deployment:
+  source_folder: src
+  delete_extra_files: true
+  cache_control_max_age: 86400
+  invalidate_paths:
+    - "/*"
+
+# GitHub Actions settings
+# Note: AWS credentials still need to be stored as GitHub Secrets:
+# - AWS_ACCESS_KEY_ID
+# - AWS_SECRET_ACCESS_KEY
+# The values below are used for local AWS CLI deployments
+github:
+  secrets:
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AWS_REGION
+    - S3_BUCKET_NAME
+    - CLOUDFRONT_DISTRIBUTION_ID

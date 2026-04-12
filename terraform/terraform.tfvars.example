@@ -1,0 +1,26 @@
+# =============================================================================
+# Example Terraform Variables
+# Copy this file to terraform.tfvars and update with your values:
+#   cp terraform.tfvars.example terraform.tfvars
+#
+# NEVER commit terraform.tfvars — it may contain sensitive information
+# =============================================================================
+
+# ---- Required ----
+bucket_name = "your-portfolio-site-2026"      # Must be globally unique
+github_repo = "yourusername/your-portfolio"    # Your GitHub repo
+
+# ---- Optional: General ----
+aws_region   = "ap-southeast-1"
+environment  = "prod"
+project_name = "portfolio"
+
+# ---- Optional: Custom Domain ----
+# Uncomment these lines if you have a custom domain
+# domain_name         = "portfolio.example.com"
+# create_route53_zone = true                     # true = create new zone, false = use existing
+# route53_zone_id     = ""                       # Required if create_route53_zone = false
+
+# ---- Optional: CloudFront ----
+cloudfront_price_class = "PriceClass_200"       # PriceClass_100 = cheapest
+github_branch          = "main"

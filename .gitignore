@@ -1,0 +1,33 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Environment files (never commit credentials)
+.env
+.env.local
+.env.*.local
+
+# AWS credentials (use aws configure, don't commit)
+.aws/credentials
+
+# Build artifacts
+dist/
+build/
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/*.tfplan
+terraform/terraform.tfvars
+terraform/.terraform.tfstate.lock.info
