@@ -7,13 +7,9 @@
 locals {
   use_custom_domain = var.domain_name != ""
 
-  # Extract the root domain from domain_name for zone lookup
-  # e.g. "portfolio.example.com" → "example.com"
-  root_domain = local.use_custom_domain ? (
-    length(regexall("\\.", var.domain_name)) > 1
-    ? join(".", slice(split(".", var.domain_name), length(split(".", var.domain_name)) - 2, length(split(".", var.domain_name))))
-    : var.domain_name
-  ) : ""
+  # Use the full domain_name for the hosted zone
+  # For Vietnamese domains like truonglab.id.vn, .id.vn is the TLD
+  root_domain = local.use_custom_domain ? var.domain_name : ""
 
   zone_id = local.use_custom_domain ? (
     var.create_route53_zone
